@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Create sample file
         run: |
@@ -18,7 +18,7 @@ jobs:
           echo "Пример файла для артефакта" > src/input.txt
 
       - name: Upload raw input
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: raw-input
           path: src/input.txt
@@ -28,10 +28,10 @@ jobs:
     needs: prepare
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Download raw input
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: raw-input
 
@@ -40,7 +40,7 @@ jobs:
           echo "Файл был обработан!" >> src/input.txt
 
       - name: Upload processed file
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: processed-input
           path: src/input.txt
@@ -50,7 +50,7 @@ jobs:
     needs: process
     steps:
       - name: Download processed file
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: processed-input
 
