@@ -1,0 +1,58 @@
+name: Artifact Example Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Create sample file
+        run: |
+          mkdir -p src
+          echo "Пример файла для артефакта" > src/input.txt
+
+      - name: Upload raw input
+        uses: actions/upload-artifact@v3
+        with:
+          name: raw-input
+          path: src/input.txt
+
+  process:
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Download raw input
+        uses: actions/download-artifact@v3
+        with:
+          name: raw-input
+
+      - name: Process file
+        run: |
+          echo "Файл был обработан!" >> src/input.txt
+
+      - name: Upload processed file
+        uses: actions/upload-artifact@v3
+        with:
+          name: processed-input
+          path: src/input.txt
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: process
+    steps:
+      - name: Download processed file
+        uses: actions/download-artifact@v3
+        with:
+          name: processed-input
+
+      - name: Display processed content
+        run: cat src/input.txt
